@@ -1,0 +1,44 @@
+name: 🚀 Deploy to DGX Spark
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy to Server
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📦 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔑 Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: 22
+          script_stop: true
+          script: |
+            set -e
+
+            # ── 앱 디렉토리로 이동 ──
+            cd ~/certvault || { echo "❌ 앱 디렉토리가 없습니다. 최초 세팅을 먼저 실행하세요."; exit 1; }
+
+            echo "📥 최신 코드 가져오는 중..."
+            git pull origin main
+
+            echo "📦 의존성 설치 중..."
+            npm ci --production=false
+
+            echo "🔨 빌드 중..."
+            npm run build
+
+            echo "♻️  PM2 재시작 중..."
+            pm2 reload certvault --update-env || pm2 start ecosystem.config.js
+
+            echo "✅ 배포 완료!"
+            pm2 status certvault
