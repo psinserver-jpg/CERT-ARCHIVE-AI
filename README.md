@@ -22,15 +22,3 @@
 - **Deployment**: GitHub Actions CI/CD + PM2 상시 실행
 
 ---
-
-## 🚀 로컬 실행 방법
-
-```bash
-# 1. 의존성 설치
-npm install
-
-# 2. 개발 서버 실행
-npm run dev
-```
-
-브라우저에서 [http://localhost:3000](http://localhost:3000) 접속.
