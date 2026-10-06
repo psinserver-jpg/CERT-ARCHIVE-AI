@@ -3,6 +3,10 @@
 > 대진전자통신고 학생들을 위한 4개 학과별(스마트전자과, 정보통신과, 소프트웨어과, AI·IoT과) 필수/추천 자격증 로드맵 및 Claude 3.5 Haiku 기반 AI 커리어 멘토링 & 기출 모의고사 플랫폼.
 > [Nixtio](https://nixtio.com) 스타일의 프리미엄 다크 미학 디자인 적용.
 
+## 🌐 온라인 사이트
+
+[CERT-ARCHIVE-AI 바로가기](https://uri-claire-had-peaceful.trycloudflare.com)
+
 ---
 
 ## 🌟 주요 기능
