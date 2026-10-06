@@ -5,7 +5,7 @@
 
 ## 🌐 온라인 사이트
 
-[CERT-ARCHIVE-AI 바로가기](https://uri-claire-had-peaceful.trycloudflare.com)
+[CERT-ARCHIVE-AI 바로가기](https://certvault-seven.vercel.app)
 
 ---
 
