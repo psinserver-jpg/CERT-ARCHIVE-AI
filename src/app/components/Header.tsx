@@ -75,7 +75,7 @@ export default function Header() {
               fontSize: "0.82rem",
             }}
           >
-            구글 로그인
+            로그인
           </Link>
         </div>
       </header>

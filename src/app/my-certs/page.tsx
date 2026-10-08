@@ -135,7 +135,7 @@ export default function MyCertsPage() {
             </div>
           </div>
           <Link href="/auth" className="nixtio-btn nixtio-btn-primary" style={{ padding: "10px 20px" }}>
-            구글 연동 동기화 ↗
+            계정 로그인 동기화 ↗
           </Link>
         </div>
       </div>

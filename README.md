@@ -14,14 +14,14 @@
 2. **내 자격증 관리함**: 번거로운 인증 없이 체크만으로 취득 자격증 간편 등록 (Supabase DB 영구 동기화 & 로컬 보관)
 3. **Claude AI 커리어 멘토**: 희망 직업 입력 시 3개년 공부 로드맵, 필요 자격증, 교내 실습실 활용 팁 제공
 4. **AI 실시간 모의 퀴즈**: 자격증 종목 및 난이도별(기초/중/상) 4지선다형 기출 문제 출제, 자동 채점 및 해설
-5. **구글 로그인 연동**: Supabase Auth OAuth 기반 안전한 로그인
+5. **소셜 로그인 연동**: Supabase Auth를 통한 Google·GitHub 로그인
 
 ---
 
 ## 🛠️ 기술 스택
 - **Frontend**: Next.js 16 (App Router, Turbopack), React 19, TypeScript
 - **Styling**: Vanilla CSS (Nixtio-Inspired Ultra-Premium Dark Theme)
-- **Database & Auth**: Supabase (PostgreSQL, Row Level Security, Google OAuth)
+- **Database & Auth**: Supabase (PostgreSQL, Row Level Security, Google·GitHub OAuth)
 - **AI Server**: DGX Spark (100.91.11.68) + Claude Code CLI (`claude-3-5-haiku-20241022`) Wrapper (Express / Port 8088)
 - **Deployment**: GitHub Actions CI/CD + PM2 상시 실행
 
