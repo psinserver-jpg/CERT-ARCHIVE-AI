@@ -2,10 +2,41 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import type { User } from "@supabase/supabase-js";
+import { supabase } from "@/lib/supabase";
 import SchoolMark from "./SchoolMark";
 
 export default function Header() {
   const pathname = usePathname();
+  const [user, setUser] = useState<User | null>(null);
+  const [authResolved, setAuthResolved] = useState(() => !supabase);
+
+  useEffect(() => {
+    if (!supabase) return;
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+      setAuthResolved(true);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const fullName = user?.user_metadata?.full_name;
+  const username = user?.user_metadata?.user_name;
+  const metadataName =
+    typeof fullName === "string" && fullName.length > 0
+      ? fullName
+      : typeof username === "string" && username.length > 0
+        ? username
+        : null;
+  const provider = user?.app_metadata?.provider;
+  const accountLabel = user
+    ? user.email ?? metadataName ?? (typeof provider === "string" ? `${provider} 계정` : "로그인됨")
+    : authResolved
+      ? "로그인"
+      : "확인 중…";
 
   const links = [
     { href: "/", label: "학과 로드맵" },
@@ -70,12 +101,18 @@ export default function Header() {
           <Link
             href="/auth"
             className="nixtio-btn nixtio-btn-primary"
+            title={user ? accountLabel : undefined}
+            aria-label={user ? `현재 로그인 계정: ${accountLabel}` : accountLabel}
             style={{
               padding: "8px 18px",
               fontSize: "0.82rem",
+              maxWidth: "min(260px, 45vw)",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
             }}
           >
-            로그인
+            {accountLabel}
           </Link>
         </div>
       </header>
