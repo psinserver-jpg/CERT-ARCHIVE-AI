@@ -82,7 +82,7 @@ export default function HomePage() {
       >
         {[
           { label: "개설 학과", val: "4개 학과", desc: "전기전자·AI소프트웨어·스마트콘텐츠·산업디자인" },
-          { label: "등록 자격증", val: "13+ 종", desc: "국가기술 및 공인민간" },
+          { label: "등록 자격증", val: `${Object.keys(CERTIFICATIONS).length}종`, desc: "국가기술·공인·등록민간" },
           { label: "AI 모델", val: "Claude Haiku 5.5", desc: "DGX Spark · Claude Code CLI" },
           { label: "인증 방식", val: "소셜 로그인", desc: "Google · GitHub" },
         ].map((stat, i) => (
