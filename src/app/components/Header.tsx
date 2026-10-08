@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import SchoolMark from "./SchoolMark";
 
 export default function Header() {
   const pathname = usePathname();
@@ -26,22 +27,7 @@ export default function Header() {
             color: "#fff",
           }}
         >
-          <div
-            style={{
-              width: "32px",
-              height: "32px",
-              borderRadius: "50%",
-              background: "linear-gradient(135deg, #38bdf8 0%, #a855f7 100%)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "0.95rem",
-              fontWeight: 800,
-              boxShadow: "0 0 16px rgba(56, 189, 248, 0.4)",
-            }}
-          >
-            D
-          </div>
+          <SchoolMark />
           <div style={{ display: "flex", flexDirection: "column" }}>
             <span style={{ fontSize: "0.92rem", fontWeight: 800, letterSpacing: "-0.02em" }}>
               대진전자통신고

@@ -114,6 +114,34 @@ body {
   box-shadow: 0 0 10px var(--accent-cyan);
 }
 
+.school-mark {
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  overflow: hidden;
+  border: 1px solid rgba(245, 200, 77, 0.64);
+  border-radius: 11px;
+  background: #fff;
+  box-shadow: 0 0 18px rgba(245, 200, 77, 0.14);
+}
+
+.school-mark-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.school-mark--auth {
+  width: 54px;
+  height: 52px;
+  margin-bottom: 16px;
+  border-radius: 15px;
+  box-shadow: 0 0 24px rgba(245, 200, 77, 0.18);
+}
+
 /* Floating Agency Nav */
 .floating-header-container {
   position: sticky;
