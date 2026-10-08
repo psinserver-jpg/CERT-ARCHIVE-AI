@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState, useEffect } from "react";
+import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { CERTIFICATIONS } from "@/lib/data/school";
 
@@ -11,6 +11,15 @@ interface QuizQuestion {
   options: string[];
   answerIndex: number;
   explanation: string;
+}
+
+interface CareerResult {
+  job: string;
+  summary: string;
+  requiredCerts?: Array<{ name: string; reason: string }>;
+  recommendedCerts?: Array<{ name: string; reason: string }>;
+  studyRoadmap?: string[];
+  tips?: string;
 }
 
 export default function CareerMentorPage() {
@@ -25,12 +34,12 @@ function CareerMentorContent() {
   const searchParams = useSearchParams();
   const initialCert = searchParams.get("cert") || "";
 
-  const [activeTab, setActiveTab] = useState<"career" | "quiz">("career");
+  const [activeTab, setActiveTab] = useState<"career" | "quiz">(initialCert ? "quiz" : "career");
 
   // 진로 추천 상태
   const [jobInput, setJobInput] = useState<string>("");
   const [careerLoading, setCareerLoading] = useState<boolean>(false);
-  const [careerResult, setCareerResult] = useState<any>(null);
+  const [careerResult, setCareerResult] = useState<CareerResult | null>(null);
 
   // 퀴즈 상태
   const [quizCertName, setQuizCertName] = useState<string>(initialCert || "정보처리기능사");
@@ -39,13 +48,6 @@ function CareerMentorContent() {
   const [quizzes, setQuizzes] = useState<QuizQuestion[]>([]);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<number, number>>({});
   const [quizSubmitted, setQuizSubmitted] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (initialCert) {
-      setActiveTab("quiz");
-      setQuizCertName(initialCert);
-    }
-  }, [initialCert]);
 
   const handleCareerSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -141,7 +143,7 @@ function CareerMentorContent() {
       <div style={{ marginBottom: "40px" }}>
         <div className="section-label">
           <span className="section-label-dot" />
-          DGX Spark Claude 3.5 Haiku 엔진
+          DGX Spark · Claude Code CLI · Claude Haiku 5.5
         </div>
         <h1 className="title-huge" style={{ fontSize: "2.4rem", marginBottom: "12px" }}>
           AI 맞춤형 진로 & 모의 퀴즈
@@ -158,9 +160,9 @@ function CareerMentorContent() {
           style={{
             padding: "10px 22px",
             borderRadius: "var(--radius-pill)",
-            background: activeTab === "career" ? "#fff" : "rgba(255, 255, 255, 0.04)",
-            color: activeTab === "career" ? "#000" : "var(--text-secondary)",
-            border: activeTab === "career" ? "1px solid #fff" : "1px solid var(--border-subtle)",
+            background: activeTab === "career" ? "var(--selection-bg)" : "var(--bg-pill)",
+            color: activeTab === "career" ? "var(--selection-color)" : "var(--text-secondary)",
+            border: activeTab === "career" ? "1px solid var(--selection-border)" : "1px solid var(--border-subtle)",
             fontWeight: 700,
             fontSize: "0.88rem",
             cursor: "pointer",
@@ -174,9 +176,9 @@ function CareerMentorContent() {
           style={{
             padding: "10px 22px",
             borderRadius: "var(--radius-pill)",
-            background: activeTab === "quiz" ? "#fff" : "rgba(255, 255, 255, 0.04)",
-            color: activeTab === "quiz" ? "#000" : "var(--text-secondary)",
-            border: activeTab === "quiz" ? "1px solid #fff" : "1px solid var(--border-subtle)",
+            background: activeTab === "quiz" ? "var(--selection-bg)" : "var(--bg-pill)",
+            color: activeTab === "quiz" ? "var(--selection-color)" : "var(--text-secondary)",
+            border: activeTab === "quiz" ? "1px solid var(--selection-border)" : "1px solid var(--border-subtle)",
             fontWeight: 700,
             fontSize: "0.88rem",
             cursor: "pointer",
@@ -222,7 +224,7 @@ function CareerMentorContent() {
                   key={job}
                   onClick={() => setJobInput(job)}
                   style={{
-                    background: "rgba(255, 255, 255, 0.04)",
+                    background: "var(--bg-pill)",
                     border: "1px solid var(--border-subtle)",
                     borderRadius: "var(--radius-pill)",
                     padding: "4px 12px",
@@ -260,11 +262,11 @@ function CareerMentorContent() {
                     ● 취업 필수 자격증
                   </div>
                   <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                    {careerResult.requiredCerts?.map((c: any, i: number) => (
+                    {careerResult.requiredCerts?.map((c, i) => (
                       <div
                         key={i}
                         style={{
-                          background: "rgba(255, 255, 255, 0.02)",
+                          background: "var(--bg-pill)",
                           border: "1px solid var(--border-subtle)",
                           padding: "16px",
                           borderRadius: "var(--radius-md)",
@@ -285,11 +287,11 @@ function CareerMentorContent() {
                     ● 가산점 추천 자격증
                   </div>
                   <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                    {careerResult.recommendedCerts?.map((c: any, i: number) => (
+                    {careerResult.recommendedCerts?.map((c, i) => (
                       <div
                         key={i}
                         style={{
-                          background: "rgba(255, 255, 255, 0.02)",
+                          background: "var(--bg-pill)",
                           border: "1px solid var(--border-subtle)",
                           padding: "16px",
                           borderRadius: "var(--radius-md)",
@@ -317,7 +319,7 @@ function CareerMentorContent() {
                       style={{
                         padding: "14px 18px",
                         borderRadius: "var(--radius-sm)",
-                        background: "rgba(255, 255, 255, 0.02)",
+                        background: "var(--bg-pill)",
                         border: "1px solid var(--border-subtle)",
                         fontSize: "0.9rem",
                         color: "var(--text-secondary)",
@@ -363,7 +365,7 @@ function CareerMentorContent() {
                   className="nixtio-input"
                 >
                   {Object.values(CERTIFICATIONS).map((c) => (
-                    <option key={c.id} value={c.name} style={{ background: "#0c0e14" }}>
+                    <option key={c.id} value={c.name}>
                       {c.name} ({c.category})
                     </option>
                   ))}
@@ -379,9 +381,9 @@ function CareerMentorContent() {
                   onChange={(e) => setQuizLevel(e.target.value)}
                   className="nixtio-input"
                 >
-                  <option value="기초" style={{ background: "#0c0e14" }}>기초 (하)</option>
-                  <option value="중" style={{ background: "#0c0e14" }}>실전 (중)</option>
-                  <option value="심화" style={{ background: "#0c0e14" }}>고난도 (상)</option>
+                  <option value="기초">기초 (하)</option>
+                  <option value="중">실전 (중)</option>
+                  <option value="심화">고난도 (상)</option>
                 </select>
               </div>
 
@@ -409,8 +411,8 @@ function CareerMentorContent() {
                         width: "28px",
                         height: "28px",
                         borderRadius: "50%",
-                        background: "#fff",
-                        color: "#000",
+                        background: "var(--selection-bg)",
+                        color: "var(--selection-color)",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
@@ -443,7 +445,7 @@ function CareerMentorContent() {
                   <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                     {quiz.options.map((option, optIdx) => {
                       const isSelected = selectedAnswers[quiz.id] === optIdx;
-                      let bg = "rgba(255, 255, 255, 0.02)";
+                      let bg = "var(--bg-pill)";
                       let border = "1px solid var(--border-subtle)";
 
                       if (quizSubmitted) {
@@ -455,8 +457,8 @@ function CareerMentorContent() {
                           border = "1px solid #f87171";
                         }
                       } else if (isSelected) {
-                        bg = "rgba(255, 255, 255, 0.1)";
-                        border = "1px solid #fff";
+                        bg = "var(--bg-pill-hover)";
+                        border = "1px solid var(--selection-border)";
                       }
 
                       return (
@@ -496,13 +498,13 @@ function CareerMentorContent() {
                         marginTop: "16px",
                         padding: "14px",
                         borderRadius: "var(--radius-sm)",
-                        background: "rgba(255, 255, 255, 0.03)",
+                        background: "var(--bg-pill)",
                         borderLeft: "3px solid var(--accent-cyan)",
                         fontSize: "0.85rem",
                         color: "var(--text-secondary)",
                       }}
                     >
-                      <strong style={{ color: "#fff" }}>해설:</strong> {quiz.explanation}
+                      <strong style={{ color: "var(--text-main)" }}>해설:</strong> {quiz.explanation}
                     </div>
                   )}
                 </div>

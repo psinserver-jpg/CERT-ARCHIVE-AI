@@ -9,12 +9,12 @@ import {
 } from "@/lib/data/school";
 
 export default function HomePage() {
-  const [selectedDeptId, setSelectedDeptId] = useState<string>("smart-electronics");
+  const [selectedDeptId, setSelectedDeptId] = useState<string>("electrical-electronics");
   const [activeCertModal, setActiveCertModal] = useState<Certification | null>(null);
 
   const currentDept = DEPARTMENTS.find((d) => d.id === selectedDeptId) || DEPARTMENTS[0];
 
-  const requiredCerts = currentDept.requiredCertIds
+  const primaryCerts = currentDept.primaryCertIds
     .map((id) => CERTIFICATIONS[id])
     .filter(Boolean);
 
@@ -35,7 +35,7 @@ export default function HomePage() {
           미래를 설계하는 <br />
           <span
             style={{
-              background: "linear-gradient(to right, #ffffff 40%, rgba(255, 255, 255, 0.45) 100%)",
+              background: "linear-gradient(to right, var(--text-main) 40%, var(--text-secondary) 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
             }}
@@ -53,8 +53,8 @@ export default function HomePage() {
             marginBottom: "36px",
           }}
         >
-          스마트전자과, 정보통신과, 소프트웨어과, AI·IoT과까지. <br />
-          필수 자격증을 확인하고, 내 취득 현황을 기록하며, Claude AI와 함께 맞춤형 커리어를 완성하세요.
+          전기전자과, AI소프트웨어과, 스마트콘텐츠과, 산업디자인과까지. <br />
+          전공 연계 자격증을 살펴보고, 내 취득 현황을 기록하며, Claude AI와 함께 진로를 탐색하세요.
         </p>
 
         <div style={{ display: "flex", gap: "14px", flexWrap: "wrap", alignItems: "center" }}>
@@ -81,10 +81,10 @@ export default function HomePage() {
         }}
       >
         {[
-          { label: "개설 학과", val: "4개 학과", desc: "전자·통신·SW·AI 특화" },
+          { label: "개설 학과", val: "4개 학과", desc: "전기전자·AI소프트웨어·스마트콘텐츠·산업디자인" },
           { label: "등록 자격증", val: "13+ 종", desc: "국가기술 및 공인민간" },
-          { label: "AI 모델", val: "Claude 3.5 Haiku", desc: "DGX Spark 기반 분석" },
-          { label: "인증 방식", val: "구글 간편 로그인", desc: "불필요한 실명정보 배제" },
+          { label: "AI 모델", val: "Claude Haiku 5.5", desc: "DGX Spark · Claude Code CLI" },
+          { label: "인증 방식", val: "소셜 로그인", desc: "Google · GitHub" },
         ].map((stat, i) => (
           <div
             key={i}
@@ -96,7 +96,7 @@ export default function HomePage() {
             <div style={{ fontSize: "0.78rem", color: "var(--text-dim)", fontWeight: 700, textTransform: "uppercase" }}>
               {stat.label}
             </div>
-            <div style={{ fontSize: "1.6rem", fontWeight: 800, color: "#fff", margin: "6px 0 2px" }}>
+            <div style={{ fontSize: "1.6rem", fontWeight: 800, color: "var(--text-main)", margin: "6px 0 2px" }}>
               {stat.val}
             </div>
             <div style={{ fontSize: "0.82rem", color: "var(--text-secondary)" }}>
@@ -128,9 +128,9 @@ export default function HomePage() {
                   style={{
                     padding: "10px 18px",
                     borderRadius: "var(--radius-pill)",
-                    background: active ? "#fff" : "rgba(255, 255, 255, 0.04)",
-                    color: active ? "#000" : "var(--text-secondary)",
-                    border: active ? "1px solid #fff" : "1px solid var(--border-subtle)",
+                    background: active ? "var(--selection-bg)" : "var(--bg-pill)",
+                    color: active ? "var(--selection-color)" : "var(--text-secondary)",
+                    border: active ? "1px solid var(--selection-border)" : "1px solid var(--border-subtle)",
                     fontWeight: 700,
                     fontSize: "0.85rem",
                     cursor: "pointer",
@@ -218,16 +218,16 @@ export default function HomePage() {
                 }}
               />
               <h4 style={{ fontSize: "1.2rem", fontWeight: 800 }}>
-                필수 취득 자격증 ({requiredCerts.length})
+                우선 추천 자격증 ({primaryCerts.length})
               </h4>
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
-              {requiredCerts.map((cert) => (
+              {primaryCerts.map((cert) => (
                 <CertRowCard
                   key={cert.id}
                   cert={cert}
-                  badgeText="필수"
+                  badgeText="우선 추천"
                   badgeColor="#f87171"
                   onSelect={() => setActiveCertModal(cert)}
                 />
@@ -248,7 +248,7 @@ export default function HomePage() {
                 }}
               />
               <h4 style={{ fontSize: "1.2rem", fontWeight: 800 }}>
-                추천 및 가산점 자격증 ({recommendedCerts.length})
+                함께 준비하면 좋은 자격증 ({recommendedCerts.length})
               </h4>
             </div>
 
@@ -289,7 +289,7 @@ export default function HomePage() {
               padding: "36px",
               maxWidth: "580px",
               width: "100%",
-              background: "#0c0e14",
+              background: "var(--bg-surface)",
               boxShadow: "0 25px 60px -15px rgba(0,0,0,0.9)",
             }}
             onClick={(e) => e.stopPropagation()}
@@ -306,9 +306,9 @@ export default function HomePage() {
               <button
                 onClick={() => setActiveCertModal(null)}
                 style={{
-                  background: "rgba(255, 255, 255, 0.06)",
+                  background: "var(--bg-pill-hover)",
                   border: "none",
-                  color: "#fff",
+                  color: "var(--text-main)",
                   width: "32px",
                   height: "32px",
                   borderRadius: "50%",
@@ -328,7 +328,7 @@ export default function HomePage() {
                 display: "grid",
                 gridTemplateColumns: "repeat(2, 1fr)",
                 gap: "12px",
-                background: "rgba(255, 255, 255, 0.02)",
+                background: "var(--bg-pill)",
                 padding: "16px",
                 borderRadius: "var(--radius-md)",
                 border: "1px solid var(--border-subtle)",

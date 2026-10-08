@@ -5,6 +5,8 @@ import { spawn } from 'child_process';
 const app = express();
 const PORT = process.env.PORT || 8088;
 const API_KEY = process.env.API_KEY || 'certvault-spark-key-2026';
+const CLAUDE_MODEL = process.env.CLAUDE_MODEL || 'claude-haiku-5-5';
+const ALLOWED_EFFORTS = new Set(['low', 'medium', 'high', 'xhigh', 'max']);
 
 app.use(cors());
 app.use(express.json());
@@ -19,17 +21,18 @@ app.use((req, res, next) => {
 });
 
 // Claude CLI 실행 함수
-function callClaudeCli(prompt: string, effort: string = 'medium'): Promise<string> {
+function callClaudeCli(prompt, effort = 'medium') {
   return new Promise((resolve, reject) => {
-    // claude cli 호출 (하이쿠 4.5 모델 권장 옵션 적용 및 파이프라인)
-    // prompt를 claude 명령어로 전달
+    const selectedEffort = ALLOWED_EFFORTS.has(effort) ? effort : 'medium';
     const claudeProcess = spawn('claude', [
-      '--model', 'claude-3-5-haiku-20241022',
-      '--dangerously-skip-permissions',
+      '--model', CLAUDE_MODEL,
+      '--effort', selectedEffort,
+      '--tools', '',
+      '--disallowedTools', 'mcp__*',
       '-p', prompt
     ], {
-      shell: true,
-      env: { ...process.env, CLAUDE_EFFORT: effort }
+      shell: false,
+      env: process.env,
     });
 
     let output = '';
@@ -43,31 +46,31 @@ function callClaudeCli(prompt: string, effort: string = 'medium'): Promise<strin
       errorOutput += data.toString();
     });
 
-    claudeProcess.on('close', (code) => {
+    const timeout = setTimeout(() => {
+      claudeProcess.kill('SIGTERM');
+      reject(new Error('Claude Code CLI 응답 시간 초과 (25s)'));
+    }, 25000);
+
+    claudeProcess.once('error', (error) => {
+      clearTimeout(timeout);
+      reject(error);
+    });
+
+    claudeProcess.once('close', (code) => {
+      clearTimeout(timeout);
       if (code === 0 && output.trim()) {
         resolve(output.trim());
       } else {
-        // claude cli 가 아직 로그인 안되었거나 없을 경우를 고려해 로그 출력
         console.warn(`Claude CLI exited with code ${code}. Error: ${errorOutput}`);
-        if (output.trim()) {
-          resolve(output.trim());
-        } else {
-          reject(new Error(errorOutput || `Claude CLI 프로세스 종료 코드: ${code}`));
-        }
+        reject(new Error(errorOutput || `Claude CLI 프로세스 종료 코드: ${code}`));
       }
     });
-
-    // 25초 타임아웃
-    setTimeout(() => {
-      claudeProcess.kill();
-      reject(new Error('Claude CLI 응답 시간 초과 (25s)'));
-    }, 25000);
   });
 }
 
 // 헬스체크 엔드포인트
 app.get('/health', (req, res) => {
-  res.json({ status: 'ok', server: 'DGX Spark Claude Wrapper', port: PORT });
+  res.json({ status: 'ok', server: 'DGX Spark Claude Code CLI', model: CLAUDE_MODEL, port: PORT });
 });
 
 // AI 질의 엔드포인트
@@ -81,9 +84,10 @@ app.post('/api/claude', async (req, res) => {
     console.log(`[Claude Server] 요청 수신 (길이: ${prompt.length})`);
     const result = await callClaudeCli(prompt, effort);
     res.json({ result });
-  } catch (err: any) {
-    console.error('[Claude Server 에러]:', err.message);
-    res.status(500).json({ error: err.message });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : '알 수 없는 오류';
+    console.error('[Claude Server 에러]:', message);
+    res.status(500).json({ error: message });
   }
 });
 

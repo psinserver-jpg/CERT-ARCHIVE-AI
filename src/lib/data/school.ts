@@ -23,7 +23,7 @@ export interface Department {
   bgGradient: string;
   description: string;
   subjects: string[];
-  requiredCertIds: string[];
+  primaryCertIds: string[];
   recommendedCertIds: string[];
   careers: string[];
 }
@@ -221,52 +221,52 @@ export const CERTIFICATIONS: Record<string, Certification> = {
 // ────────────────────────────────────────
 export const DEPARTMENTS: Department[] = [
   {
-    id: 'smart-electronics',
-    name: '스마트전자과',
+    id: 'electrical-electronics',
+    name: '전기전자과',
     emoji: '⚡',
     color: '#6384ff',
     bgGradient: 'linear-gradient(135deg, rgba(99,132,255,0.15) 0%, rgba(99,132,255,0.05) 100%)',
-    description: '전자회로 설계, 마이크로컨트롤러, 스마트 기기 개발을 학습합니다.',
-    subjects: ['전자회로', '디지털공학', '마이크로컨트롤러', '자동제어', '전자캐드'],
-    requiredCertIds: ['electronic-device', 'computer-usage-2'],
-    recommendedCertIds: ['electronic-cad', 'electrical-craftsman', 'computer-usage-1', 'itq-excel'],
-    careers: ['전자제품 개발자', '임베디드 개발자', '자동화 엔지니어', '품질관리 기술자'],
+    description: '전기·전자 기초를 바탕으로 회로와 전자기기 분야의 진로를 준비합니다.',
+    subjects: ['전기 기초', '전자회로', '전자기기', '회로설계', '자동제어'],
+    primaryCertIds: ['electrical-craftsman', 'electronic-device'],
+    recommendedCertIds: ['electronic-cad', 'computer-usage-2', 'itq-excel'],
+    careers: ['전기설비 기술자', '전자기기 개발·정비', '자동제어 기술자', '전자회로 설계'],
   },
   {
-    id: 'info-comm',
-    name: '정보통신과',
-    emoji: '📡',
+    id: 'ai-software',
+    name: 'AI소프트웨어과',
+    emoji: '🤖',
     color: '#a78bfa',
     bgGradient: 'linear-gradient(135deg, rgba(167,139,250,0.15) 0%, rgba(167,139,250,0.05) 100%)',
-    description: '네트워크, 통신 시스템, 무선통신 기술을 심화 학습합니다.',
-    subjects: ['통신이론', '네트워크', '무선통신', '광통신', '정보보안 기초'],
-    requiredCertIds: ['info-comm-craftsman', 'computer-usage-2'],
-    recommendedCertIds: ['network-manager-2', 'info-processing-craftsman', 'computer-usage-1', 'itq-excel'],
-    careers: ['네트워크 엔지니어', '통신 기술자', '시스템 관리자', '보안 관제 요원'],
+    description: '소프트웨어 개발과 인공지능 분야를 중심으로 IT 진로를 탐색합니다.',
+    subjects: ['프로그래밍', '데이터베이스', '운영체제', '인공지능', '네트워크'],
+    primaryCertIds: ['info-processing-craftsman', 'linux-master-2'],
+    recommendedCertIds: ['network-manager-2', 'computer-usage-2', 'info-processing-engineer'],
+    careers: ['소프트웨어 개발자', 'AI 서비스 개발', '웹·앱 개발자', '시스템 운영'],
   },
   {
-    id: 'software',
-    name: '소프트웨어과',
-    emoji: '💻',
+    id: 'smart-content',
+    name: '스마트콘텐츠과',
+    emoji: '🎬',
     color: '#34d399',
     bgGradient: 'linear-gradient(135deg, rgba(52,211,153,0.15) 0%, rgba(52,211,153,0.05) 100%)',
-    description: '프로그래밍, 앱 개발, 데이터베이스, 인공지능 기초를 학습합니다.',
-    subjects: ['파이썬', '자바', '웹개발', '데이터베이스', 'AI 기초'],
-    requiredCertIds: ['info-processing-craftsman', 'computer-usage-2'],
-    recommendedCertIds: ['computer-usage-1', 'linux-master-2', 'info-processing-engineer', 'itq-excel'],
-    careers: ['소프트웨어 개발자', '앱 개발자', '웹 개발자', '데이터 분석가'],
+    description: '디지털 매체와 콘텐츠 제작 역량을 키우는 분야의 진로를 안내합니다.',
+    subjects: ['디지털콘텐츠', '영상·미디어', '애니메이션', '게임·VR', '콘텐츠기획'],
+    primaryCertIds: ['itq-ppt', 'computer-usage-2'],
+    recommendedCertIds: ['itq-excel', 'computer-usage-1'],
+    careers: ['영상·미디어 콘텐츠 제작', '디지털 콘텐츠 기획', '게임·VR 콘텐츠 제작', '콘텐츠 편집'],
   },
   {
-    id: 'ai-iot',
-    name: 'AI·IoT과',
-    emoji: '🤖',
+    id: 'industrial-design',
+    name: '산업디자인과',
+    emoji: '✏️',
     color: '#fb923c',
     bgGradient: 'linear-gradient(135deg, rgba(251,146,60,0.15) 0%, rgba(251,146,60,0.05) 100%)',
-    description: '인공지능, 사물인터넷, 임베디드 시스템, 빅데이터 기초를 학습합니다.',
-    subjects: ['AI 기초', 'IoT 시스템', '빅데이터', '임베디드', '클라우드 기초'],
-    requiredCertIds: ['iot-craftsman', 'info-processing-craftsman'],
-    recommendedCertIds: ['electronic-device', 'network-manager-2', 'computer-usage-1', 'linux-master-2'],
-    careers: ['AI 엔지니어', 'IoT 개발자', '데이터 사이언티스트', '스마트팩토리 전문가'],
+    description: '시각·제품 디자인과 디지털 표현 역량을 연결하는 진로를 안내합니다.',
+    subjects: ['기초디자인', '시각디자인', '컴퓨터그래픽', '제품디자인', '디지털콘텐츠'],
+    primaryCertIds: ['itq-ppt', 'computer-usage-2'],
+    recommendedCertIds: ['computer-usage-1', 'itq-excel'],
+    careers: ['산업·제품 디자이너', '시각디자이너', '그래픽 디자이너', '디지털 콘텐츠 디자이너'],
   },
 ];
 

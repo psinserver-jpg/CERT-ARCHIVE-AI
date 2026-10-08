@@ -84,7 +84,7 @@ export default function MyCertsPage() {
     if (deptId === "all") return allCerts;
     const dept = DEPARTMENTS.find((d) => d.id === deptId);
     if (!dept) return allCerts;
-    const ids = new Set([...dept.requiredCertIds, ...dept.recommendedCertIds]);
+    const ids = new Set([...dept.primaryCertIds, ...dept.recommendedCertIds]);
     return allCerts.filter((c) => ids.has(c.id));
   };
 
@@ -104,7 +104,7 @@ export default function MyCertsPage() {
         style={{
           padding: "36px",
           marginBottom: "40px",
-          background: "linear-gradient(135deg, rgba(16, 20, 28, 0.9) 0%, rgba(8, 10, 14, 0.95) 100%)",
+          background: "var(--archive-banner)",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
@@ -130,7 +130,7 @@ export default function MyCertsPage() {
             <div style={{ fontSize: "0.78rem", color: "var(--text-dim)", textTransform: "uppercase", fontWeight: 700 }}>
               보유 중인 자격증
             </div>
-            <div style={{ fontSize: "2.4rem", fontWeight: 800, color: "#fff", lineHeight: 1.1 }}>
+            <div style={{ fontSize: "2.4rem", fontWeight: 800, color: "var(--text-main)", lineHeight: 1.1 }}>
               {selectedCertIds.length} <span style={{ fontSize: "1rem", color: "var(--text-dim)" }}>/ {allCerts.length}</span>
             </div>
           </div>
@@ -147,9 +147,9 @@ export default function MyCertsPage() {
           style={{
             padding: "10px 22px",
             borderRadius: "var(--radius-pill)",
-            background: activeTab === "acquired" ? "#fff" : "rgba(255, 255, 255, 0.04)",
-            color: activeTab === "acquired" ? "#000" : "var(--text-secondary)",
-            border: activeTab === "acquired" ? "1px solid #fff" : "1px solid var(--border-subtle)",
+            background: activeTab === "acquired" ? "var(--selection-bg)" : "var(--bg-pill)",
+            color: activeTab === "acquired" ? "var(--selection-color)" : "var(--text-secondary)",
+            border: activeTab === "acquired" ? "1px solid var(--selection-border)" : "1px solid var(--border-subtle)",
             fontWeight: 700,
             fontSize: "0.88rem",
             cursor: "pointer",
@@ -163,9 +163,9 @@ export default function MyCertsPage() {
           style={{
             padding: "10px 22px",
             borderRadius: "var(--radius-pill)",
-            background: activeTab === "available" ? "#fff" : "rgba(255, 255, 255, 0.04)",
-            color: activeTab === "available" ? "#000" : "var(--text-secondary)",
-            border: activeTab === "available" ? "1px solid #fff" : "1px solid var(--border-subtle)",
+            background: activeTab === "available" ? "var(--selection-bg)" : "var(--bg-pill)",
+            color: activeTab === "available" ? "var(--selection-color)" : "var(--text-secondary)",
+            border: activeTab === "available" ? "1px solid var(--selection-border)" : "1px solid var(--border-subtle)",
             fontWeight: 700,
             fontSize: "0.88rem",
             cursor: "pointer",
@@ -266,8 +266,8 @@ export default function MyCertsPage() {
                   padding: "6px 14px",
                   borderRadius: "var(--radius-pill)",
                   fontSize: "0.8rem",
-                  background: selectedDeptFilter === "all" ? "rgba(255,255,255,0.15)" : "transparent",
-                  color: selectedDeptFilter === "all" ? "#fff" : "var(--text-secondary)",
+                  background: selectedDeptFilter === "all" ? "var(--selection-bg)" : "transparent",
+                  color: selectedDeptFilter === "all" ? "var(--selection-color)" : "var(--text-secondary)",
                   border: "1px solid var(--border-subtle)",
                   cursor: "pointer",
                 }}
@@ -282,8 +282,8 @@ export default function MyCertsPage() {
                     padding: "6px 14px",
                     borderRadius: "var(--radius-pill)",
                     fontSize: "0.8rem",
-                    background: selectedDeptFilter === dept.id ? "rgba(255,255,255,0.15)" : "transparent",
-                    color: selectedDeptFilter === dept.id ? "#fff" : "var(--text-secondary)",
+                    background: selectedDeptFilter === dept.id ? "var(--selection-bg)" : "transparent",
+                    color: selectedDeptFilter === dept.id ? "var(--selection-color)" : "var(--text-secondary)",
                     border: "1px solid var(--border-subtle)",
                     cursor: "pointer",
                   }}
@@ -337,8 +337,8 @@ export default function MyCertsPage() {
                       height: "28px",
                       borderRadius: "50%",
                       border: isSelected ? "none" : "2px solid var(--border-hover)",
-                      background: isSelected ? "#fff" : "transparent",
-                      color: "#000",
+                      background: isSelected ? "var(--selection-bg)" : "transparent",
+                      color: isSelected ? "var(--selection-color)" : "var(--text-main)",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",

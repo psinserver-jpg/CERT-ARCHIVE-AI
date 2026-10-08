@@ -239,7 +239,6 @@ export async function POST(req: Request) {
         },
         body: JSON.stringify({
           prompt,
-          model: 'claude-3-5-haiku-20241022',
           effort: 'medium',
         }),
         signal: AbortSignal.timeout(15000), // 15초 타임아웃

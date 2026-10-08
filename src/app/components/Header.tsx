@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import type { User } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase";
 import SchoolMark from "./SchoolMark";
+import ThemeToggle from "./ThemeToggle";
 
 export default function Header() {
   const pathname = usePathname();
@@ -41,6 +42,7 @@ export default function Header() {
   const links = [
     { href: "/", label: "학과 로드맵" },
     { href: "/my-certs", label: "내 자격증" },
+    { href: "/timetable", label: "시간표" },
     { href: "/career-mentor", label: "AI 진로 & 퀴즈" },
   ];
 
@@ -55,7 +57,7 @@ export default function Header() {
             alignItems: "center",
             gap: "10px",
             textDecoration: "none",
-            color: "#fff",
+            color: "var(--text-main)",
           }}
         >
           <SchoolMark />
@@ -97,7 +99,8 @@ export default function Header() {
         </nav>
 
         {/* Action Button */}
-        <div>
+        <div className="header-actions">
+          <ThemeToggle />
           <Link
             href="/auth"
             className="nixtio-btn nixtio-btn-primary"

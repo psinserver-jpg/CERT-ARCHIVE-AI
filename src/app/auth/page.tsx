@@ -90,7 +90,7 @@ export default function AuthPage() {
           <p style={{ color: "var(--text-secondary)", fontSize: "0.92rem" }}>
             {user
               ? `${user.email} 계정으로 로그인되어 있습니다.`
-              : "대진전자통신고 포털 — 구글 계정으로 자격증을 저장하세요"}
+              : "로그인 후 자격증을 저장하고 여러 기기에서 동기화하세요"}
           </p>
         </div>
 
@@ -108,7 +108,7 @@ export default function AuthPage() {
                 }}
               >
                 <div style={{ fontSize: "0.85rem", color: "var(--text-dim)" }}>현재 로그인 계정</div>
-                <div style={{ fontWeight: 700, fontSize: "1.05rem", color: "#fff", marginTop: "4px" }}>
+                <div style={{ fontWeight: 700, fontSize: "1.05rem", color: "var(--text-main)", marginTop: "4px" }}>
                   {user.email}
                 </div>
               </div>

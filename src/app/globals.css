@@ -4,6 +4,7 @@
    NIXTIO-INSPIRED DESIGN SYSTEM (Ultra-Premium Agency Dark Aesthetic)
    ============================================================ */
 :root {
+  color-scheme: dark;
   --bg-deep: #050608;
   --bg-surface: #0a0c10;
   --bg-card: rgba(14, 17, 24, 0.65);
@@ -25,6 +26,18 @@
   --accent-orange: #fb923c;
   --accent-blue: #60a5fa;
 
+  --header-bg: rgba(10, 12, 16, 0.75);
+  --primary-bg: #ffffff;
+  --primary-color: #050608;
+  --primary-hover: #eaecef;
+  --primary-shadow: rgba(255, 255, 255, 0.15);
+  --selection-bg: #ffffff;
+  --selection-color: #050608;
+  --selection-border: #ffffff;
+  --grid-line: rgba(255, 255, 255, 0.015);
+  --scroll-thumb: rgba(255, 255, 255, 0.12);
+  --archive-banner: linear-gradient(135deg, rgba(16, 20, 28, 0.9) 0%, rgba(8, 10, 14, 0.95) 100%);
+
   --font-sans: 'Pretendard', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   
   --radius-xs: 6px;
@@ -37,6 +50,45 @@
   --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
   --shadow-subtle: 0 10px 40px -10px rgba(0, 0, 0, 0.7);
   --shadow-glow: 0 0 60px -15px rgba(56, 189, 248, 0.18);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg-deep: #f3f6fb;
+  --bg-surface: #ffffff;
+  --bg-card: rgba(255, 255, 255, 0.9);
+  --bg-card-hover: #ffffff;
+  --bg-pill: rgba(23, 35, 55, 0.045);
+  --bg-pill-hover: rgba(23, 35, 55, 0.08);
+
+  --border-subtle: rgba(30, 43, 65, 0.12);
+  --border-hover: rgba(30, 43, 65, 0.24);
+  --border-active: rgba(37, 99, 235, 0.42);
+
+  --text-main: #172033;
+  --text-secondary: #526078;
+  --text-dim: #748198;
+
+  --accent-cyan: #0284c7;
+  --accent-purple: #7c3aed;
+  --accent-green: #059669;
+  --accent-orange: #c2410c;
+  --accent-blue: #2563eb;
+
+  --header-bg: rgba(255, 255, 255, 0.84);
+  --primary-bg: #172033;
+  --primary-color: #ffffff;
+  --primary-hover: #29364d;
+  --primary-shadow: rgba(23, 32, 51, 0.14);
+  --selection-bg: #172033;
+  --selection-color: #ffffff;
+  --selection-border: #172033;
+  --grid-line: rgba(23, 32, 51, 0.035);
+  --scroll-thumb: rgba(23, 32, 51, 0.2);
+  --archive-banner: linear-gradient(135deg, rgba(255, 255, 255, 0.94) 0%, rgba(239, 245, 252, 0.96) 100%);
+
+  --shadow-subtle: 0 10px 40px -10px rgba(26, 39, 61, 0.18);
+  --shadow-glow: 0 0 60px -15px rgba(2, 132, 199, 0.12);
 }
 
 *, *::before, *::after {
@@ -79,8 +131,8 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-                    linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+  background-image: linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+                    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
   background-size: 64px 64px;
   mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, black 20%, transparent 80%);
 }
@@ -118,13 +170,13 @@ body {
   display: inline-grid;
   flex: 0 0 auto;
   place-items: center;
-  width: 38px;
-  height: 38px;
+  width: 42px;
+  height: 42px;
   overflow: hidden;
-  border: 1px solid rgba(245, 200, 77, 0.64);
-  border-radius: 11px;
-  background: #fff;
-  box-shadow: 0 0 18px rgba(245, 200, 77, 0.14);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  filter: drop-shadow(0 3px 8px rgba(26, 37, 62, 0.24));
 }
 
 .school-mark-image {
@@ -135,11 +187,10 @@ body {
 }
 
 .school-mark--auth {
-  width: 54px;
-  height: 52px;
+  width: 68px;
+  height: 66px;
   margin-bottom: 16px;
-  border-radius: 15px;
-  box-shadow: 0 0 24px rgba(245, 200, 77, 0.18);
+  filter: drop-shadow(0 4px 14px rgba(26, 37, 62, 0.2));
 }
 
 /* Floating Agency Nav */
@@ -161,7 +212,7 @@ body {
   max-width: 1160px;
   padding: 10px 18px;
   border-radius: var(--radius-pill);
-  background: rgba(10, 12, 16, 0.75);
+  background: var(--header-bg);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--border-subtle);
@@ -188,14 +239,14 @@ body {
 }
 
 .nav-link-pill:hover {
-  color: #fff;
+  color: var(--text-main);
   background: var(--bg-pill-hover);
 }
 
 .nav-link-pill.active {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.09);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-main);
+  background: var(--bg-pill-hover);
+  border: 1px solid var(--border-subtle);
 }
 
 /* Agency Buttons */
@@ -216,27 +267,27 @@ body {
 }
 
 .nixtio-btn-primary {
-  background: #ffffff;
-  color: #050608;
-  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.15);
+  background: var(--primary-bg);
+  color: var(--primary-color);
+  box-shadow: 0 4px 20px var(--primary-shadow);
 }
 
 .nixtio-btn-primary:hover {
-  background: #eaecef;
+  background: var(--primary-hover);
   transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 30px var(--primary-shadow);
 }
 
 .nixtio-btn-outline {
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--bg-pill);
   color: var(--text-main);
   border: 1px solid var(--border-subtle);
 }
 
 .nixtio-btn-outline:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--bg-pill-hover);
   border-color: var(--border-hover);
-  color: #fff;
+  color: var(--text-main);
   transform: translateY(-2px);
 }
 
@@ -256,7 +307,7 @@ body {
   border-color: var(--border-hover);
   background: var(--bg-card-hover);
   transform: translateY(-3px);
-  box-shadow: 0 20px 45px -15px rgba(0, 0, 0, 0.8);
+  box-shadow: var(--shadow-subtle);
 }
 
 /* Tag Pill */
@@ -267,19 +318,19 @@ body {
   font-size: 0.75rem;
   font-weight: 600;
   border-radius: var(--radius-pill);
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--bg-pill);
+  border: 1px solid var(--border-subtle);
   color: var(--text-secondary);
 }
 
 /* Form Elements */
 .nixtio-input {
   width: 100%;
-  background: rgba(14, 17, 24, 0.8);
+  background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   padding: 14px 18px;
-  color: #fff;
+  color: var(--text-main);
   font-family: var(--font-sans);
   font-size: 0.95rem;
   outline: none;
@@ -300,9 +351,157 @@ body {
   background: var(--bg-deep);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--scroll-thumb);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.22);
+  background: var(--border-hover);
+}
+
+.theme-toggle {
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 50%;
+  color: var(--text-main);
+  background: var(--bg-pill);
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.theme-toggle:hover {
+  background: var(--bg-pill-hover);
+  border-color: var(--border-hover);
+  transform: rotate(-8deg);
+}
+
+.theme-icon-light {
+  display: none;
+}
+
+:root[data-theme="light"] .theme-icon-light {
+  display: block;
+}
+
+:root[data-theme="light"] .theme-icon-dark {
+  display: none;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  min-width: 0;
+}
+
+.timetable-select {
+  min-width: 110px;
+  padding: 11px 14px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  color: var(--text-main);
+  font: inherit;
+}
+
+.timetable-row {
+  display: grid;
+  grid-template-columns: 74px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.timetable-row:last-child {
+  border-bottom: 0;
+}
+
+@media (max-width: 1000px) {
+  .floating-header-container {
+    top: 10px;
+    padding: 0 12px;
+  }
+
+  .floating-header {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 24px;
+  }
+
+  .floating-header nav {
+    order: 3;
+    flex: 1 0 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 560px) {
+  .floating-header-container {
+    margin-bottom: 12px;
+    padding: 0 8px;
+  }
+
+  .floating-header {
+    border-radius: 20px;
+    padding: 8px 10px;
+  }
+
+  .floating-header nav {
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .floating-header nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-link-pill {
+    flex: 0 0 auto;
+    padding: 8px 11px;
+    font-size: 0.78rem;
+  }
+
+  .header-actions {
+    gap: 7px;
+  }
+
+  .theme-toggle {
+    width: 36px;
+    height: 36px;
+  }
+
+  .timetable-row {
+    grid-template-columns: 54px minmax(0, 1fr);
+    gap: 10px;
+    padding: 16px 12px;
+  }
+
+  .timetable-room {
+    grid-column: 2;
+    font-size: 0.75rem;
+  }
+}
+
+:root[data-theme="light"] .nixtio-bg {
+  background:
+    radial-gradient(ellipse 65% 50% at 50% 0%, rgba(2, 132, 199, 0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 45% 35% at 85% 65%, rgba(124, 58, 237, 0.05) 0%, transparent 60%),
+    var(--bg-deep);
+}
+
+:root[data-theme="light"] .title-huge {
+  color: var(--text-main);
+}
+
+:root[data-theme="light"] .nixtio-card {
+  background: var(--bg-card) !important;
 }

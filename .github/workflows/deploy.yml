@@ -40,5 +40,15 @@ jobs:
             echo "♻️  PM2 재시작 중..."
             pm2 reload certvault --update-env || pm2 start ecosystem.config.js
 
+            echo "♻️  DGX Spark Claude Code CLI 래퍼 재시작 중..."
+            cd ~/certvault/scripts/claude-server
+            npm install --omit=dev --no-audit --no-fund
+            if pm2 describe claude-api >/dev/null 2>&1; then
+              pm2 reload claude-api
+            else
+              pm2 start server.js --name "claude-api"
+            fi
+
             echo "✅ 배포 완료!"
             pm2 status certvault
+            pm2 status claude-api
