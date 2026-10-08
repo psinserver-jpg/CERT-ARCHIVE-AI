@@ -6,6 +6,7 @@ import { CERTIFICATIONS } from "@/lib/data/school";
 
 interface QuizQuestion {
   id: number;
+  topic?: string;
   question: string;
   options: string[];
   answerIndex: number;
@@ -93,10 +94,14 @@ function CareerMentorContent() {
         }),
       });
       const data = await res.json();
-      if (data.success && data.data && data.data.quizzes) {
+      if (
+        data.success &&
+        Array.isArray(data.data?.quizzes) &&
+        data.data.quizzes.length >= 10
+      ) {
         setQuizzes(data.data.quizzes);
       } else {
-        alert("퀴즈를 생성하지 못했습니다.");
+        alert("중복을 제외한 10문항을 만들지 못했습니다. 다시 시도해 주세요.");
       }
     } catch (err) {
       console.error(err);
@@ -386,9 +391,12 @@ function CareerMentorContent() {
                 className="nixtio-btn nixtio-btn-primary"
                 style={{ height: "48px" }}
               >
-                {quizLoading ? "출제 중..." : "문제 출제 →"}
+                {quizLoading ? "출제 중..." : "10문항 출제 →"}
               </button>
             </div>
+            <p style={{ marginTop: "14px", color: "var(--text-dim)", fontSize: "0.82rem" }}>
+              서로 다른 출제 주제로 구성된 10문항을 제공합니다.
+            </p>
           </div>
 
           {quizzes.length > 0 && (
@@ -413,9 +421,23 @@ function CareerMentorContent() {
                     >
                       {qIdx + 1}
                     </span>
-                    <h4 style={{ fontSize: "1.05rem", fontWeight: 700, lineHeight: 1.5 }}>
-                      {quiz.question}
-                    </h4>
+                    <div>
+                      {quiz.topic && (
+                        <span
+                          className="tag-badge"
+                          style={{
+                            marginBottom: "8px",
+                            color: "var(--accent-cyan)",
+                            borderColor: "rgba(56, 189, 248, 0.25)",
+                          }}
+                        >
+                          {quiz.topic}
+                        </span>
+                      )}
+                      <h4 style={{ fontSize: "1.05rem", fontWeight: 700, lineHeight: 1.5 }}>
+                        {quiz.question}
+                      </h4>
+                    </div>
                   </div>
 
                   <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
