@@ -9,91 +9,26 @@ type QuizQuestionData = {
   explanation: string;
 };
 
-const FALLBACK_QUIZ_QUESTIONS: QuizQuestionData[] = [
-  {
-    id: 1,
-    topic: '기본키와 관계형 데이터베이스',
-    question: '다음 중 관계형 데이터베이스의 기본키가 만족해야 하는 성질로 옳은 것은?',
-    options: ['유일성과 최소성', '중복성과 가변성', 'Null 허용과 중복성', '최대성과 순서성'],
-    answerIndex: 0,
-    explanation: '기본키는 각 행을 구별하는 유일성과 꼭 필요한 속성만 사용하는 최소성을 만족해야 합니다.',
-  },
-  {
-    id: 2,
-    topic: 'OSI 전송 계층',
-    question: 'OSI 7계층 중 종단 간 신뢰성 있는 데이터 전송을 담당하는 계층은?',
-    options: ['물리 계층', '데이터링크 계층', '전송 계층', '표현 계층'],
-    answerIndex: 2,
-    explanation: '전송 계층은 포트 번호를 사용하고 종단 간 흐름 제어와 오류 제어를 수행합니다.',
-  },
-  {
-    id: 3,
-    topic: 'C 언어 포인터',
-    question: 'C 언어에서 변수의 메모리 주소를 저장하는 데 사용하는 자료형은?',
-    options: ['포인터', '구조체', '열거형', '공용체'],
-    answerIndex: 0,
-    explanation: '포인터 변수는 다른 변수나 메모리 영역의 주소를 저장합니다.',
-  },
-  {
-    id: 4,
-    topic: 'SQL 검색 조건',
-    question: 'SQL에서 특정 조건을 만족하는 행만 조회할 때 사용하는 절은?',
-    options: ['ORDER BY', 'WHERE', 'GROUP BY', 'CREATE'],
-    answerIndex: 1,
-    explanation: 'WHERE 절은 조회·수정·삭제 대상 행을 조건에 따라 필터링합니다.',
-  },
-  {
-    id: 5,
-    topic: '스택 자료구조',
-    question: '스택 자료구조의 데이터 처리 방식으로 옳은 것은?',
-    options: ['먼저 들어온 데이터가 먼저 나간다', '나중에 들어온 데이터가 먼저 나간다', '항상 오름차순으로 나간다', '임의의 위치에서만 꺼낼 수 있다'],
-    answerIndex: 1,
-    explanation: '스택은 LIFO(Last In, First Out) 방식으로 동작합니다.',
-  },
-  {
-    id: 6,
-    topic: 'TCP 연결 설정',
-    question: 'TCP 연결을 시작할 때 사용하는 3-way handshake의 올바른 순서는?',
-    options: ['ACK → SYN → FIN', 'SYN → SYN-ACK → ACK', 'FIN → ACK → SYN', 'SYN → FIN → SYN-ACK'],
-    answerIndex: 1,
-    explanation: '클라이언트의 SYN, 서버의 SYN-ACK, 클라이언트의 ACK 순서로 연결을 설정합니다.',
-  },
-  {
-    id: 7,
-    topic: '2진수 변환',
-    question: '2진수 1010을 10진수로 변환한 값은?',
-    options: ['8', '9', '10', '12'],
-    answerIndex: 2,
-    explanation: '1010₂는 1×2³ + 0×2² + 1×2¹ + 0×2⁰이므로 10입니다.',
-  },
-  {
-    id: 8,
-    topic: '함수와 모듈화',
-    question: '프로그램에서 함수를 사용하는 가장 적절한 이유는?',
-    options: ['모든 변수를 전역으로 만들기 위해', '기능을 나누어 재사용과 유지보수를 쉽게 하기 위해', '컴파일을 생략하기 위해', '메모리 주소를 고정하기 위해'],
-    answerIndex: 1,
-    explanation: '함수는 기능을 모듈화하여 코드 재사용성과 가독성, 유지보수성을 높입니다.',
-  },
-  {
-    id: 9,
-    topic: '외래키 참조 무결성',
-    question: '관계형 데이터베이스에서 외래키의 주된 역할은?',
-    options: ['다른 테이블의 행과 관계를 연결하고 참조 무결성을 유지한다', '테이블의 모든 행을 암호화한다', '조회 결과를 자동 정렬한다', '열의 자료형을 변환한다'],
-    answerIndex: 0,
-    explanation: '외래키는 다른 테이블의 키를 참조하여 테이블 간 관계와 참조 무결성을 유지합니다.',
-  },
-  {
-    id: 10,
-    topic: '데이터베이스 정규화',
-    question: '데이터베이스 정규화의 주된 목적은?',
-    options: ['데이터 중복을 늘리는 것', '모든 테이블을 하나로 합치는 것', '조회 조건을 없애는 것', '중복과 갱신 이상을 줄이는 것'],
-    answerIndex: 3,
-    explanation: '정규화는 데이터 중복을 줄이고 삽입·수정·삭제 과정의 이상 현상을 예방합니다.',
-  },
-];
+const QUIZ_TARGET_COUNT = 10;
+const QUIZ_CANDIDATE_COUNT = 16;
+const QUIZ_STOP_WORDS = new Set([
+  '다음', '중', '무엇', '옳은', '설명', '가장', '적절한', '경우', '대해', '때',
+  '사용하는', '사용할', '올바른', '것으로', '것은', '기능', '역할', '방법', '문제',
+  '해당', '보기', '모두', '알맞은', '바르게', '고르시오', '있는', '어떤', '의미',
+]);
 
 function normalizeForComparison(value: string) {
   return value.normalize('NFKC').toLocaleLowerCase().replace(/[^\p{L}\p{N}]/gu, '');
+}
+
+function getSignificantTokens(value: string) {
+  return value
+    .normalize('NFKC')
+    .toLocaleLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, ' ')
+    .split(/\s+/u)
+    .map((token) => token.replace(/(?:은|는|이|가|을|를|에서|에게|으로|로|와|과|의|도|만|부터|까지|보다)$/u, ''))
+    .filter((token) => token.length > 1 && !QUIZ_STOP_WORDS.has(token));
 }
 
 function isNearDuplicate(first: string, second: string, threshold: number) {
@@ -114,7 +49,23 @@ function isNearDuplicate(first: string, second: string, threshold: number) {
   return intersectionSize / unionSize >= threshold;
 }
 
-function normalizeQuizQuestions(value: unknown): QuizQuestionData[] {
+function tokenSimilarity(first: string, second: string) {
+  const firstTokens = new Set(getSignificantTokens(first));
+  const secondTokens = new Set(getSignificantTokens(second));
+  if (!firstTokens.size || !secondTokens.size) return 0;
+
+  const intersectionSize = [...firstTokens].filter((token) => secondTokens.has(token)).length;
+  return intersectionSize / new Set([...firstTokens, ...secondTokens]).size;
+}
+
+function isDuplicateQuestion(first: Pick<QuizQuestionData, 'topic' | 'question'>, second: Pick<QuizQuestionData, 'topic' | 'question'>) {
+  return isNearDuplicate(first.topic, second.topic, 0.7) ||
+    isNearDuplicate(first.question, second.question, 0.82) ||
+    tokenSimilarity(first.topic, second.topic) >= 0.5 ||
+    tokenSimilarity(`${first.topic} ${first.question}`, `${second.topic} ${second.question}`) >= 0.58;
+}
+
+function normalizeQuizQuestions(value: unknown, previousQuestions: Array<Pick<QuizQuestionData, 'topic' | 'question'>> = []): QuizQuestionData[] {
   if (!Array.isArray(value)) return [];
 
   const uniqueQuestions: QuizQuestionData[] = [];
@@ -139,9 +90,9 @@ function normalizeQuizQuestions(value: unknown): QuizQuestionData[] {
 
     const question = item.question.trim();
     const topic = typeof item.topic === 'string' && item.topic.trim() ? item.topic.trim() : question;
-    const isDuplicate = uniqueQuestions.some((existing) =>
-      isNearDuplicate(existing.topic, topic, 0.72) ||
-      isNearDuplicate(existing.question, question, 0.84),
+    const candidateQuestion = { topic, question };
+    const isDuplicate = [...previousQuestions, ...uniqueQuestions].some((existing) =>
+      isDuplicateQuestion(existing, candidateQuestion),
     );
     if (isDuplicate) continue;
 
@@ -161,7 +112,15 @@ function normalizeQuizQuestions(value: unknown): QuizQuestionData[] {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { action, jobTitle, certName, level, answers } = body;
+    const { action, jobTitle, certName, level } = body;
+    const previousQuestions: Array<Pick<QuizQuestionData, 'topic' | 'question'>> = Array.isArray(body.previousQuestions)
+      ? body.previousQuestions.slice(-50).flatMap((candidate: unknown) => {
+        if (typeof candidate !== 'object' || candidate === null || Array.isArray(candidate)) return [];
+        const item = candidate as Record<string, unknown>;
+        if (typeof item.topic !== 'string' || typeof item.question !== 'string') return [];
+        return [{ topic: item.topic.trim().slice(0, 120), question: item.question.trim().slice(0, 180) }];
+      })
+      : [];
 
     // 백엔드 Claude CLI Wrapper 서버 URL (DGX Spark 또는 로컬 포워딩)
     const LLM_API_URL = process.env.CLAUDE_API_URL || 'http://100.91.11.68:8088/api/claude';
@@ -201,14 +160,18 @@ export async function POST(req: Request) {
   "tips": "대진전자통신고등학교 실습실이나 방과후 과정을 활용할 수 있는 현실적인 팁"
 }`;
     } else if (action === 'generate-quiz') {
+      const previousQuestionsJson = JSON.stringify(previousQuestions);
       prompt = `대진전자통신고등학교 학생들을 위한 기술 자격증 모의고사 출제자입니다.
 자격증명: "${certName}"
 난이도: "${level || '중'}"
 
-해당 자격증의 필기/실기 핵심 이론을 바탕으로 4지선다형 객관식 퀴즈를 만들어주세요.
-반드시 서로 다른 핵심 개념을 다루는 문제를 최소 10개, 기본적으로 정확히 10개 출제하세요.
-같은 개념을 문장만 바꾸어 반복하지 말고, 출제 영역과 정답 근거가 서로 겹치지 않도록 구성하세요.
-각 문항에 한 줄짜리 고유한 "topic"을 포함하고, 10개 topic은 서로 달라야 합니다.
+이 자격증의 실제 출제 범위에 맞는 4지선다형 문제 후보를 ${QUIZ_CANDIDATE_COUNT}개 만들어주세요. 최종 사용자는 이 중 중복을 제거한 10개를 풉니다.
+먼저 출제 범위를 서로 다른 세부 영역으로 나눈 뒤, 후보마다 하나의 고유한 핵심 개념/기능만 평가하세요. 같은 정의나 정답 근거를 문장만 바꿔 반복하지 마세요.
+암기형에 치우치지 않도록 개념 확인, 상황 판단, 결과 해석, 순서/절차, 계산 또는 오류 찾기 등 자격증에 맞는 여러 출제 형식을 섞으세요.
+각 문항의 "topic"은 구체적인 핵심 개념을 짧게 표시하고, 서로 겹치지 않게 하세요. 자격증 범위 밖의 일반 IT 상식은 내지 마세요.
+이전 회차의 주제/문제(유사한 개념도 금지): ${previousQuestionsJson}
+이전 회차 문제를 단어만 바꿔 재사용하지 말고 다른 세부 영역에서 새로운 문제를 출제하세요. 이전 기록이 비어 있으면 이를 무시하세요.
+후보 문제는 모두 서로 달라야 하며, 정답은 하나만 명확히 성립하고 해설에는 정답의 근거를 설명하세요.
 다른 설명이나 마크다운 백틱(\`\`\`) 없이 순수 JSON만 응답하세요:
 {
   "certName": "${certName}",
@@ -216,8 +179,8 @@ export async function POST(req: Request) {
   "quizzes": [
     {
       "id": 1,
-      "topic": "서로 다른 출제 개념",
-      "question": "문제 내용",
+      "topic": "고유한 세부 출제 영역",
+      "question": "해당 자격증 범위 내의 구체적인 문제",
       "options": ["1번 보기", "2번 보기", "3번 보기", "4번 보기"],
       "answerIndex": 0,
       "explanation": "해설 및 핵심 개념 정리"
@@ -257,23 +220,23 @@ export async function POST(req: Request) {
         const cleaned = data.result.replace(/```json/g, '').replace(/```/g, '').trim();
         const parsed = JSON.parse(cleaned);
         if (action === 'generate-quiz' && typeof parsed === 'object' && parsed !== null) {
-          const generatedQuestions = normalizeQuizQuestions(parsed.quizzes);
-          const combinedQuestions = normalizeQuizQuestions([
-            ...generatedQuestions,
-            ...FALLBACK_QUIZ_QUESTIONS,
-          ]).slice(0, 10);
-          const quizzes = combinedQuestions.length >= 10
-            ? combinedQuestions
-            : FALLBACK_QUIZ_QUESTIONS;
+          const generatedQuestions = normalizeQuizQuestions(parsed.quizzes, previousQuestions);
+          if (generatedQuestions.length < QUIZ_TARGET_COUNT) {
+            return NextResponse.json({
+              success: false,
+              error: `서로 다른 문제를 ${QUIZ_TARGET_COUNT}개 확보하지 못했습니다. 잠시 후 다시 생성해 주세요.`,
+              generatedCount: generatedQuestions.length,
+            }, { status: 502 });
+          }
 
           return NextResponse.json({
             success: true,
-            source: generatedQuestions.length >= 10 ? 'claude-cli-dgx' : 'claude-cli-dgx+smart-template-engine',
+            source: 'claude-cli-dgx',
             data: {
               ...parsed,
               certName: parsed.certName || certName || '정보처리기능사',
               level: parsed.level || level || '중',
-              quizzes,
+              quizzes: generatedQuestions.slice(0, QUIZ_TARGET_COUNT),
             },
           });
         }
@@ -285,7 +248,7 @@ export async function POST(req: Request) {
       }
     }
 
-    // 로컬 백엔드 서버가 아직 실행되지 않았을 때를 위한 스마트 폴백
+    // 퀴즈는 임의의 범용 문항으로 채우면 자격증과 무관하거나 매번 같은 문제가 되므로 성공으로 위장하지 않는다.
     if (action === 'career-recommend') {
       return NextResponse.json({
         success: true,
@@ -333,18 +296,14 @@ export async function POST(req: Request) {
 
     if (action === 'generate-quiz') {
       return NextResponse.json({
-        success: true,
-        source: 'smart-template-engine',
-        data: {
-          certName: certName || '정보처리기능사',
-          level: level || '중',
-          quizzes: FALLBACK_QUIZ_QUESTIONS,
-        },
-      });
+        success: false,
+        error: 'AI 문제 생성 서버에 연결할 수 없습니다. 서버 상태를 확인한 뒤 다시 시도해 주세요.',
+      }, { status: 503 });
     }
 
     return NextResponse.json({ error: '지원하지 않는 요청입니다.' }, { status: 400 });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message || '서버 오류 발생' }, { status: 500 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : '서버 오류 발생';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

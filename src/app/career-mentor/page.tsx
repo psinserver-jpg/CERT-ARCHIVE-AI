@@ -46,6 +46,7 @@ function CareerMentorContent() {
   const [quizLevel, setQuizLevel] = useState<string>("중");
   const [quizLoading, setQuizLoading] = useState<boolean>(false);
   const [quizzes, setQuizzes] = useState<QuizQuestion[]>([]);
+  const [quizError, setQuizError] = useState<string>("");
   const [selectedAnswers, setSelectedAnswers] = useState<Record<number, number>>({});
   const [quizSubmitted, setQuizSubmitted] = useState<boolean>(false);
 
@@ -84,8 +85,31 @@ function CareerMentorContent() {
     setQuizSubmitted(false);
     setSelectedAnswers({});
     setQuizzes([]);
+    setQuizError("");
 
     try {
+      const historyKey = `certvault:quiz-history:${quizCertName}`;
+      let previousQuestions: Array<{ topic: string; question: string }> = [];
+      try {
+        // localStorage keeps the exclusion list across tabs and browser restarts.
+        // Migrate history written by the earlier sessionStorage-based version.
+        const savedHistory = localStorage.getItem(historyKey);
+        const oldSessionHistory = sessionStorage.getItem(historyKey);
+        const history = JSON.parse(savedHistory || oldSessionHistory || "[]");
+        if (Array.isArray(history)) {
+          previousQuestions = history
+            .filter((item): item is { topic: string; question: string } =>
+              item && typeof item.topic === "string" && typeof item.question === "string",
+            )
+            .slice(-50);
+          if (!savedHistory && previousQuestions.length > 0) {
+            localStorage.setItem(historyKey, JSON.stringify(previousQuestions));
+          }
+        }
+      } catch {
+        // 손상된 브라우저 기록은 무시하고 새 문제를 요청합니다.
+      }
+
       const res = await fetch("/api/career-ai", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -93,6 +117,7 @@ function CareerMentorContent() {
           action: "generate-quiz",
           certName: quizCertName,
           level: quizLevel,
+          previousQuestions,
         }),
       });
       const data = await res.json();
@@ -102,12 +127,24 @@ function CareerMentorContent() {
         data.data.quizzes.length >= 10
       ) {
         setQuizzes(data.data.quizzes);
+        try {
+          const nextHistory = [
+            ...previousQuestions,
+            ...data.data.quizzes.map((quiz: QuizQuestion) => ({
+              topic: quiz.topic || quiz.question,
+              question: quiz.question,
+            })),
+          ].slice(-100);
+          localStorage.setItem(historyKey, JSON.stringify(nextHistory));
+        } catch {
+          // 저장공간을 사용할 수 없어도 이번 퀴즈는 계속 풀 수 있습니다.
+        }
       } else {
-        alert("중복을 제외한 10문항을 만들지 못했습니다. 다시 시도해 주세요.");
+        setQuizError(data.error || "서로 다른 문제 10개를 만들지 못했습니다. 다시 시도해 주세요.");
       }
     } catch (err) {
       console.error(err);
-      alert("서버 통신 오류가 발생했습니다.");
+      setQuizError("서버 통신 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
     } finally {
       setQuizLoading(false);
     }
@@ -397,8 +434,13 @@ function CareerMentorContent() {
               </button>
             </div>
             <p style={{ marginTop: "14px", color: "var(--text-dim)", fontSize: "0.82rem" }}>
-              서로 다른 출제 주제로 구성된 10문항을 제공합니다.
+              서로 다른 출제 영역에서 10문항을 구성하며, 이 브라우저에 저장된 최근 출제 이력과 겹치지 않도록 합니다.
             </p>
+            {quizError && (
+              <p role="alert" style={{ marginTop: "12px", color: "#f87171", fontSize: "0.88rem" }}>
+                {quizError}
+              </p>
+            )}
           </div>
 
           {quizzes.length > 0 && (
