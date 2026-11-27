@@ -1,7 +1,7 @@
 #!/bin/bash
 # =============================================================
 #  CertVault 서버 최초 세팅 스크립트
-#  DGX Spark (psin2@100.91.11.68) 에서 한 번만 실행
+#  DGX Spark 에서 한 번만 실행
 #  사용법: bash scripts/server-setup.sh <GITHUB_REPO_URL>
 #  예시:   bash scripts/server-setup.sh https://github.com/yourname/certvault.git
 # =============================================================
@@ -94,7 +94,7 @@ echo ""
 echo "================================================"
 echo "  ✅ 세팅 완료!"
 echo "================================================"
-echo "  서버 주소: http://100.91.11.68:3000"
+echo "  서버 주소: http://<DGX Tailscale IP>:3000"
 echo ""
 echo "  PM2 상태 확인: pm2 status"
 echo "  로그 확인:     pm2 logs certvault"
