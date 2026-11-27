@@ -48,3 +48,7 @@ id_ed25519
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# DGX Claude CLI wrapper
+scripts/claude-server/node_modules/
+scripts/claude-server/.env

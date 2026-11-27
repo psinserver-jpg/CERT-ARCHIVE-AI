@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server';
 
+// DGX Spark 의 Claude Code CLI 응답을 기다릴 수 있도록 함수 실행 시간을 늘린다.
+export const maxDuration = 120;
+
 type QuizQuestionData = {
   id: number;
   topic: string;
@@ -122,9 +125,9 @@ export async function POST(req: Request) {
       })
       : [];
 
-    // 백엔드 Claude CLI Wrapper 서버 URL (DGX Spark 또는 로컬 포워딩)
-    const LLM_API_URL = process.env.CLAUDE_API_URL || 'http://100.91.11.68:8088/api/claude';
-    const LLM_API_KEY = process.env.CLAUDE_API_KEY || 'certvault-spark-key-2026';
+    // DGX Spark Claude Code CLI 래퍼 주소 (Tailscale Funnel HTTPS 주소 + /api/claude)
+    const LLM_API_URL = process.env.CLAUDE_API_URL;
+    const LLM_API_KEY = process.env.CLAUDE_API_KEY;
 
     let prompt = '';
 
@@ -191,28 +194,38 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: '유효하지 않은 요청 액션입니다.' }, { status: 400 });
     }
 
-    // Claude CLI 백엔드 서버 호출 시도
-    let data;
-    try {
-      const response = await fetch(LLM_API_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': LLM_API_KEY,
-        },
-        body: JSON.stringify({
-          prompt,
-          effort: 'medium',
-        }),
-        signal: AbortSignal.timeout(15000), // 15초 타임아웃
-      });
+    // DGX Spark 의 Claude Code CLI 래퍼 서버 호출
+    let data: { result?: string } | undefined;
+    let serverError = '';
+    if (!LLM_API_URL || !LLM_API_KEY) {
+      serverError = 'CLAUDE_API_URL / CLAUDE_API_KEY 환경 변수가 설정되지 않았습니다.';
+    } else {
+      try {
+        const response = await fetch(LLM_API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': LLM_API_KEY,
+          },
+          body: JSON.stringify({
+            prompt,
+            effort: action === 'generate-quiz' ? 'medium' : 'low',
+          }),
+          signal: AbortSignal.timeout(110000),
+        });
 
-      if (response.ok) {
-        data = await response.json();
+        if (response.ok) {
+          data = await response.json();
+        } else {
+          const errorBody = await response.json().catch(() => ({}));
+          serverError = `DGX 서버 오류 ${response.status}: ${errorBody.error ?? response.statusText}`;
+        }
+      } catch (error) {
+        serverError = error instanceof Error ? error.message : String(error);
       }
-    } catch {
-      // 서버 미연결 시 모의 응답(Fallback) 제공하여 UI 정상 작동 보장
-      console.log('Claude CLI 서버 응답 대기 초과 또는 미실행. 내장 AI 템플릿 엔진으로 응답합니다.');
+    }
+    if (serverError) {
+      console.error('[career-ai] Claude CLI 서버 호출 실패:', serverError);
     }
 
     if (data && data.result) {

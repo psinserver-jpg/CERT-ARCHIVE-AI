@@ -38,7 +38,6 @@ module.exports = {
       env: {
         NODE_ENV: 'production',
         PORT: 8088,
-        API_KEY: 'certvault-spark-key-2026',
       },
       watch: false,
       autorestart: true,
